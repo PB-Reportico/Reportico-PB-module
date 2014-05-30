@@ -100,7 +100,7 @@ reportico_jquery('.swMenuItemLink, .swPrpSubmit, .swLinkMenu, .reporticoSubmit')
         return true;
     }
 
-	var expandpanel = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
+    var expandpanel = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
     var reportico_container = reportico_jquery(this).closest("#reportico_container");
 
     if ( !reportico_jquery(this).attr("href") )
@@ -115,11 +115,12 @@ reportico_jquery('.swMenuItemLink, .swPrpSubmit, .swLinkMenu, .reporticoSubmit')
             }
             else
             {
-			    ajaxaction = reportico_ajax_script;
+                ajaxaction = reportico_ajax_script;
             }
+            ajaxaction += "?module=reportico&page=ajax&op=runreport";
 
 
-			params = forms.serialize();
+            params = forms.serialize();
             params += "&module=reportico";
             params += "&page=ajax";
             params += "&op=runreport";
@@ -128,7 +129,7 @@ reportico_jquery('.swMenuItemLink, .swPrpSubmit, .swLinkMenu, .reporticoSubmit')
 
             var cont = this;
             reportico_jquery.ajax({
-                type: 'GET',
+                type: 'POST',
                 url: ajaxaction,
                 data: params,
                 dataType: 'html',
@@ -162,8 +163,8 @@ reportico_jquery('.swMenuItemLink, .swPrpSubmit, .swLinkMenu, .reporticoSubmit')
 */
 reportico_jquery('#returnFromExpand').live('click', function() {
 
-	var critform = reportico_jquery(this).closest('#criteriaform');
-	var expandpanel = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
+    var critform = reportico_jquery(this).closest('#criteriaform');
+    var expandpanel = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
     reportico_jquery(expandpanel).addClass("loading");
 
     var params = reportico_jquery(critform).serialize();
@@ -171,13 +172,14 @@ reportico_jquery('#returnFromExpand').live('click', function() {
     params += "&partial_template=critbody";
     params += "&" + reportico_jquery(this).attr("name") + "=1";
 
-	forms = reportico_jquery(this).closest('.swMntForm,.swPrpForm,form');
+    forms = reportico_jquery(this).closest('.swMntForm,.swPrpForm,form');
     ajaxaction = reportico_ajax_script;
+            ajaxaction += "?module=reportico&page=ajax&op=runreport";
 
-	fillPoint = reportico_jquery(this).closest('#criteriaform').find('#criteriabody');
-		
+    fillPoint = reportico_jquery(this).closest('#criteriaform').find('#criteriabody');
+        
     reportico_jquery.ajax({
-      type: 'GET',
+      type: 'POST',
       url: ajaxaction,
       data: params,
       dataType: 'html',
@@ -193,13 +195,13 @@ reportico_jquery('#returnFromExpand').live('click', function() {
       }
     });
     return false;
-	});
+    });
 
   reportico_jquery('#reporticoPerformExpand').live('click', function() {
 
-	forms = reportico_jquery(this).closest('.swMntForm,.swPrpForm,form');
-	var ajaxaction = reportico_jquery(forms).attr("action");
-	var critform = reportico_jquery(this).closest('#criteriaform');
+    forms = reportico_jquery(this).closest('.swMntForm,.swPrpForm,form');
+    var ajaxaction = reportico_jquery(forms).attr("action");
+    var critform = reportico_jquery(this).closest('#criteriaform');
     ajaxaction = reportico_ajax_script;
 
     var params = reportico_jquery(critform).serialize();
@@ -210,11 +212,13 @@ reportico_jquery('#returnFromExpand').live('click', function() {
     params += "&page=ajax";
     params += "&" + reportico_jquery(this).attr("name") + "=1";
 
-	var fillPoint = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
+    var fillPoint = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
+
+    ajaxaction += "?module=reportico&page=ajax&op=runreport";
     reportico_jquery(fillPoint).addClass("loading");
 
     reportico_jquery.ajax({
-        type: 'GET',
+        type: 'POST',
         url: ajaxaction,
         data: params,
         dataType: 'html',
@@ -254,8 +258,8 @@ reportico_jquery('.swPrintBox,.prepareAjaxExecute,#prepareAjaxExecute').live('cl
 
 
     var reportico_container = reportico_jquery(this).closest("#reportico_container");
-	var expandpanel = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
-	var critform = reportico_jquery(this).closest('#criteriaform');
+    var expandpanel = reportico_jquery(this).closest('#criteriaform').find('#swPrpExpandCell');
+    var critform = reportico_jquery(this).closest('#criteriaform');
     reportico_jquery(expandpanel).addClass("loading");
 
     params = reportico_jquery(critform).serialize();
@@ -266,6 +270,7 @@ reportico_jquery('.swPrintBox,.prepareAjaxExecute,#prepareAjaxExecute').live('cl
     params += "&" + reportico_jquery(this).attr("name") + "=1";
     //params += "&reportico_ajax_called=1";
 
+
     forms = reportico_jquery(this).closest('.swMntForm,.swPrpForm,form');
     if ( jQuery.type(reportico_ajax_script) === 'undefined' || !reportico_ajax_script )
     {
@@ -275,6 +280,7 @@ reportico_jquery('.swPrintBox,.prepareAjaxExecute,#prepareAjaxExecute').live('cl
     {
         ajaxaction = reportico_ajax_script;
     }
+    ajaxaction += "?module=reportico&page=ajax&op=runreport";
 
     var csvpdfoutput = false;
     var htmloutput = false;
@@ -321,7 +327,7 @@ reportico_jquery('.swPrintBox,.prepareAjaxExecute,#prepareAjaxExecute').live('cl
 
     var cont = this;
     reportico_jquery.ajax({
-        type: 'GET',
+        type: 'POST',
         url: ajaxaction,
         data: params,
         dataType: 'html',
@@ -355,8 +361,8 @@ reportico_jquery('.swPrintBox,.prepareAjaxExecute,#prepareAjaxExecute').live('cl
 function init() {
   reportico_jquery(function() { reportico_jquery('#reporticotabs').tabs(); });
   var dlg = reportico_jquery('#reportico_dialog').dialog({ 
-	autoOpen: false,
-	buttons: { "<?php echo TEXT_SUBMIT; ?>": function() { reportico_jquery(this).dialog('close'); document.getElementById('todo').form.submit(); } }
+    autoOpen: false,
+    buttons: { "<?php echo TEXT_SUBMIT; ?>": function() { reportico_jquery(this).dialog('close'); document.getElementById('todo').form.submit(); } }
   });
   dlg.parent().appendTo(reportico_jquery("#reports"));
 
@@ -380,7 +386,7 @@ function runreport(url, container)
     url += "&reportico_ajax_called=1";
     reportico_jquery(container).closest("#reportico_container").addClass("loading");
     reportico_jquery.ajax({
-        type: "GET",
+        type: "POST",
         contentType: "application/json; charset=utf-8",
         url: url,
         dataType: "html",
@@ -416,36 +422,36 @@ function toggleLine(id) {
     var elems = document.getElementsByTagName('*'),i;
     for (i in elems)
     {
-		if ( ie7 )
-		{
-        	if((" "+elems[i].className+" ").indexOf(" "+id+" ") > -1)
-			{
-            	if(elems[i].style.display == "inline") {
-                	elems[i].style.display = "none";
-                	togbut.innerHTML = "+";
-            	}
-            	else {
-                	togbut.innerHTML = "-";
-                	elems[i].style.display = "";
-                	elems[i].style.display = "inline";
-            	}
-			}
-		}
-		else
-		{
-        	if((" "+elems[i].className+" ").indexOf(" "+id+" ") > -1)
-			{
-            	if(elems[i].style.display == "table-row") {
-                	elems[i].style.display = "none";
-                	togbut.innerHTML = "+";
-            	}
-            	else {
-                	togbut.innerHTML = "-";
-                	elems[i].style.display = "";
-                	elems[i].style.display = "table-row";
-            	}
-			}
-		}
+        if ( ie7 )
+        {
+            if((" "+elems[i].className+" ").indexOf(" "+id+" ") > -1)
+            {
+                if(elems[i].style.display == "inline") {
+                    elems[i].style.display = "none";
+                    togbut.innerHTML = "+";
+                }
+                else {
+                    togbut.innerHTML = "-";
+                    elems[i].style.display = "";
+                    elems[i].style.display = "inline";
+                }
+            }
+        }
+        else
+        {
+            if((" "+elems[i].className+" ").indexOf(" "+id+" ") > -1)
+            {
+                if(elems[i].style.display == "table-row") {
+                    elems[i].style.display = "none";
+                    togbut.innerHTML = "+";
+                }
+                else {
+                    togbut.innerHTML = "-";
+                    elems[i].style.display = "";
+                    elems[i].style.display = "table-row";
+                }
+            }
+        }
     }
 } 
 
