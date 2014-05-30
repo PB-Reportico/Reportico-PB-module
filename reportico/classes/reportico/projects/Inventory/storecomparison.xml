@@ -1,0 +1,86 @@
+<?xml version="1.0"?><Report><ReportQuery><Format><ReportTitle>Store Remaining Comparison</ReportTitle><ReportDescription>Enter Your Report Criteria Here. To enter criteria use the appropriate expand key.When you are happy select the appropriate output format and click OK.&lt;br&gt;
+
+&lt;b&gt;Showing where (branch 1) has more than (branch 2)&lt;/b&gt;
+</ReportDescription><PageSize>.DEFAULT</PageSize><PageOrientation>.DEFAULT</PageOrientation><TopMargin></TopMargin><BottomMargin></BottomMargin><RightMargin></RightMargin><LeftMargin></LeftMargin><pdfFont></pdfFont><pdfFontSize></pdfFontSize><PreExecuteCode>// Fetch branch criteria and ensure they are populated
+$branch1 = $_criteria[&quot;branch1&quot;]-&gt;get_criteria_value(&quot;VALUE&quot;,false);
+$branch2 = $_criteria[&quot;branch2&quot;]-&gt;get_criteria_value(&quot;VALUE&quot;,false);
+
+if ( !$branch1 || !$branch2)
+{
+   trigger_error(&quot;You must specify two branches compare&quot;);
+   return;
+}
+
+
+// Fetch branch store names
+if ( !( $branchname1 = fetchBranchName($_pdo, $branch1) ) ) return;
+if ( !( $branchname2 = fetchBranchName($_pdo, $branch2) ) ) return;
+
+// Set column titles to be branch name
+for ($ct = 0; $ct &lt; count($this-&gt;columns); $ct++)
+{
+   $col = $this-&gt;columns[$ct];
+   if ( $col-&gt;query_name == &quot;remaining1&quot; ) $col-&gt;attributes[&quot;column_title&quot;] = $branchname1;
+   if ( $col-&gt;query_name == &quot;remaining2&quot; ) $col-&gt;attributes[&quot;column_title&quot;] = $branchname2;
+}
+
+// Now set the title
+//$this-&gt;attributes[&quot;ReportTitle&quot;] = &quot;Comparing where $branchname1 has more than $branchname2&quot; ;
+
+
+
+
+function fetchBranchName($pdo, $storeid)
+{
+    // Fetch branch1 store name
+    $sql = &quot;SELECT primary_name primary_name 
+    FROM address_book 
+    WHERE 1 = 1    AND type = 'bm'
+    AND ref_id = '$storeid'
+    &quot;;
+    
+    $stmt = $pdo-&gt;query($sql);
+    if ( !$stmt ) 
+    { 
+        handlePDOError($pdo, $sql); 
+        return false;  
+    }
+    else
+    {
+        $branchname = $stmt-&gt;fetchColumn();
+        return $branchname; 
+    }
+}
+
+
+function handlePDOError($pdo, $sql)
+{
+    $info = $pdo-&gt;errorInfo();
+    trigger_error ( &quot;Error &quot;.$info[1].&quot; - &lt;BR&gt;&quot;.$info[2] );
+}
+
+</PreExecuteCode><bodyDisplay>show</bodyDisplay><graphDisplay>show</graphDisplay></Format><Datasource><SourceType>database</SourceType><SourceConnection><DatabaseType></DatabaseType><DatabaseName></DatabaseName><HostName>localhost</HostName><ServiceName></ServiceName><UserName></UserName><Password></Password></SourceConnection></Datasource><EntryForm><Query><TableSql>t_store_1 LEFT JOIN t_store_2 ON t_store_1.sku = t_store_2.sku</TableSql><WhereSql>    
+AND t_store_1.remaining &gt; t_store_2.remaining
+     </WhereSql><GroupSql></GroupSql><RowSelection>all</RowSelection><SQL><QuerySql></QuerySql><SQLRaw></SQLRaw></SQL><QueryColumns><QueryColumn><Name>sku</Name><TableName>t_store_1</TableName><ColumnName>sku</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title></column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn><QueryColumn><Name>description_short</Name><TableName>t_store_1</TableName><ColumnName>description_short</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title></column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn><QueryColumn><Name>remaining1</Name><TableName></TableName><ColumnName>t_store_1.remaining AS</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title></column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn><QueryColumn><Name>remaining2</Name><TableName></TableName><ColumnName>t_store_2.remaining AS</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title></column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn><QueryColumn><Name>store1_name</Name><TableName>t_store_1</TableName><ColumnName>primary_name</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>hide</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title></column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn><QueryColumn><Name>store2_name</Name><TableName>t_store_2</TableName><ColumnName>primary_name</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>hide</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title></column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn><QueryColumn><Name>group_title</Name><TableName></TableName><ColumnName></ColumnName><ColumnType></ColumnType><ColumnLength></ColumnLength><Format><column_display>hide</column_display><content_type>plain</content_type><ColumnStartPDF></ColumnStartPDF><justify>left</justify><ColumnWidthPDF></ColumnWidthPDF><ColumnWidthHTML></ColumnWidthHTML><column_title>Info:</column_title><tooltip></tooltip><group_header_label></group_header_label><group_header_label_xpos></group_header_label_xpos><group_header_data_xpos></group_header_data_xpos><group_trailer_label></group_trailer_label></Format></QueryColumn></QueryColumns><OrderColumns></OrderColumns><PreSQLS><PreSQL><SQLText>CREATE TEMPORARY TABLE t_store_1 ( sku VARCHAR(40), description_short CHAR(40), primary_name CHAR(50), remaining INTEGER ) ;</SQLText></PreSQL><PreSQL><SQLText>INSERT INTO t_store_1
+SELECT inventory.sku, inventory.description_short description_short, primary_name, SUM(remaining)
+FROM inventory
+    INNER JOIN inventory_history ON inventory_history.sku = inventory.sku
+    INNER JOIN address_book ON inventory_history.store_id = address_book.ref_id
+WHERE 1 = 1
+AND type = &quot;bm&quot;
+[AND inventory.vendor_id in ({vendor})]
+[AND inventory_history.store_id in ({branch1})]
+AND  inventory.inactive = '0' 
+GROUP BY 1 ;</SQLText></PreSQL><PreSQL><SQLText>CREATE TEMPORARY TABLE t_store_2 ( sku varchar(40), primary_name CHAR(50), remaining INTEGER ) ;</SQLText></PreSQL><PreSQL><SQLText>INSERT INTO t_store_2
+SELECT inventory.sku, primary_name, SUM(remaining)
+FROM inventory
+INNER JOIN inventory_history ON inventory_history.sku = inventory.sku
+INNER JOIN address_book ON inventory_history.store_id = address_book.ref_id
+WHERE 1 = 1
+AND type = &quot;bm&quot;
+[AND inventory.vendor_id in ({vendor})]
+[AND inventory_history.store_id in ({branch2})]
+AND  inventory.inactive = '0' 
+GROUP BY 1
+;</SQLText></PreSQL></PreSQLS></Query><Assignments><Assignment><AssignName>group_title</AssignName><AssignNameNew></AssignNameNew><Expression>'Showing where '.{store1_name}.' has more than '.{store2_name}</Expression><Condition></Condition></Assignment><Assignment><AssignName>sku</AssignName><AssignNameNew></AssignNameNew><Expression>apply_style('ROW', 'background-color', '#e0e0ff');</Expression><Condition></Condition></Assignment><Assignment><AssignName>sku</AssignName><AssignNameNew></AssignNameNew><Expression>apply_style('ROW', 'background-color', '#ececec');</Expression><Condition>( lineno() % 2 == 1 )</Condition></Assignment></Assignments><Criteria><CriteriaItem><Name>branch1</Name><Title>Branch 1</Title><QueryTableName></QueryTableName><QueryColumnName></QueryColumnName><CriteriaType>LOOKUP</CriteriaType><CriteriaDisplay>DROPDOWN</CriteriaDisplay><ExpandDisplay>NOINPUT</ExpandDisplay><ReturnColumn>store_id</ReturnColumn><DisplayColumn>primary_name</DisplayColumn><OverviewColumn>primary_name</OverviewColumn><MatchColumn>primary_name</MatchColumn><CriteriaDefaults></CriteriaDefaults><CriteriaList></CriteriaList><Query><TableSql>address_book</TableSql><WhereSql>   AND type = &quot;bm&quot;</WhereSql><GroupSql></GroupSql><RowSelection></RowSelection><SQLRaw></SQLRaw><SQL><QuerySql></QuerySql></SQL><QueryColumns><QueryColumn><Name>store_id</Name><TableName></TableName><ColumnName>ref_id</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><justify>left</justify></Format></QueryColumn><QueryColumn><Name>primary_name</Name><TableName></TableName><ColumnName>primary_name</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><justify>left</justify></Format></QueryColumn></QueryColumns><OrderColumns><OrderColumn><Name>store_id</Name><OrderType>ASC</OrderType></OrderColumn></OrderColumns><Assignments></Assignments></Query><CriteriaLinks></CriteriaLinks></CriteriaItem><CriteriaItem><Name>branch2</Name><Title>Branch 2</Title><QueryTableName></QueryTableName><QueryColumnName></QueryColumnName><CriteriaType>LOOKUP</CriteriaType><CriteriaDisplay>DROPDOWN</CriteriaDisplay><ExpandDisplay>NOINPUT</ExpandDisplay><ReturnColumn>store_id</ReturnColumn><DisplayColumn>primary_name</DisplayColumn><OverviewColumn>primary_name</OverviewColumn><MatchColumn>primary_name</MatchColumn><CriteriaDefaults></CriteriaDefaults><CriteriaList></CriteriaList><Query><TableSql>address_book</TableSql><WhereSql>   AND type = &quot;bm&quot;</WhereSql><GroupSql></GroupSql><RowSelection></RowSelection><SQLRaw></SQLRaw><SQL><QuerySql></QuerySql></SQL><QueryColumns><QueryColumn><Name>store_id</Name><TableName></TableName><ColumnName>ref_id</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><justify>left</justify></Format></QueryColumn><QueryColumn><Name>primary_name</Name><TableName></TableName><ColumnName>primary_name</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><justify>left</justify></Format></QueryColumn></QueryColumns><OrderColumns><OrderColumn><Name>store_id</Name><OrderType>ASC</OrderType></OrderColumn></OrderColumns><Assignments></Assignments></Query><CriteriaLinks></CriteriaLinks></CriteriaItem><CriteriaItem><Name>vendor</Name><Title>Vendor</Title><QueryTableName></QueryTableName><QueryColumnName></QueryColumnName><CriteriaType>LOOKUP</CriteriaType><CriteriaDisplay>MULTI</CriteriaDisplay><ExpandDisplay>NOINPUT</ExpandDisplay><ReturnColumn>vendor_id</ReturnColumn><DisplayColumn>primary_name</DisplayColumn><OverviewColumn>primary_name</OverviewColumn><MatchColumn>primary_name</MatchColumn><CriteriaDefaults></CriteriaDefaults><CriteriaList></CriteriaList><Query><TableSql>address_book</TableSql><WhereSql>   
+AND type = &quot;vm&quot;</WhereSql><GroupSql></GroupSql><RowSelection></RowSelection><SQLRaw></SQLRaw><SQL><QuerySql></QuerySql></SQL><QueryColumns><QueryColumn><Name>vendor_id</Name><TableName></TableName><ColumnName>ref_id</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><justify>left</justify></Format></QueryColumn><QueryColumn><Name>primary_name</Name><TableName></TableName><ColumnName>primary_name</ColumnName><ColumnType>char</ColumnType><ColumnLength>30</ColumnLength><Format><column_display>show</column_display><content_type>plain</content_type><justify>left</justify></Format></QueryColumn></QueryColumns><OrderColumns><OrderColumn><Name>vendor_id</Name><OrderType></OrderType></OrderColumn></OrderColumns><Assignments></Assignments></Query><CriteriaLinks></CriteriaLinks></CriteriaItem></Criteria><Output><PageHeaders><PageHeader><LineNumber>1</LineNumber><HeaderText>{report_title}</HeaderText><Format><ColumnStartPDF></ColumnStartPDF><justify>center</justify><ColumnWidthPDF></ColumnWidthPDF></Format></PageHeader></PageHeaders><PageFooters></PageFooters><DisplayOrders><DisplayOrder><ColumnName>sku</ColumnName><OrderNumber>1</OrderNumber></DisplayOrder><DisplayOrder><ColumnName>description_short</ColumnName><OrderNumber>2</OrderNumber></DisplayOrder><DisplayOrder><ColumnName>remaining1</ColumnName><OrderNumber>3</OrderNumber></DisplayOrder><DisplayOrder><ColumnName>remaining2</ColumnName><OrderNumber>4</OrderNumber></DisplayOrder><DisplayOrder><ColumnName>store1_name</ColumnName><OrderNumber>5</OrderNumber></DisplayOrder><DisplayOrder><ColumnName>store2_name</ColumnName><OrderNumber>6</OrderNumber></DisplayOrder><DisplayOrder><ColumnName>group_title</ColumnName><OrderNumber>7</OrderNumber></DisplayOrder></DisplayOrders><Groups><Group><GroupName>REPORT_BODY</GroupName><BeforeGroupHeader>blankline</BeforeGroupHeader><AfterGroupHeader>blankline</AfterGroupHeader><BeforeGroupTrailer>blankline</BeforeGroupTrailer><AfterGroupTrailer>blankline</AfterGroupTrailer><GroupHeaders><GroupHeader><GroupHeaderColumn>group_title</GroupHeaderColumn></GroupHeader></GroupHeaders><GroupTrailers></GroupTrailers></Group></Groups><Graphs></Graphs></Output></EntryForm></ReportQuery></Report>
