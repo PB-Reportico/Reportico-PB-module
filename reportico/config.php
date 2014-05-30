@@ -30,15 +30,15 @@ define('MODULE_REPORTICO_VERSION', '3.1');
 define('SECURITY_ID_REPORTICO', 3);
 // New Database Tables
 // Set the title menu
-// Set the menus
+// Menu Locations
 if (defined('MODULE_REPORTICO_STATUS')) {
-  $menu[] = array(
+  $mainmenu["tools"]['submenu']['reportico'] = array(
     'text'        => MENU_HEADING_REPORTICO,
     'heading'     => MENU_HEADING_TOOLS,
-    'rank'        => 5,
+    'order'       => 40,
     'security_id' => SECURITY_ID_REPORTICO,
     'link'        => html_href_link(FILENAME_DEFAULT, 'module=reportico&amp;page=reports', 'SSL'),
+    'show_in_users_settings' => true,
   );
 }
-
 ?>
