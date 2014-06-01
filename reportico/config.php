@@ -24,7 +24,7 @@
 // 3.3 => 2011-11-15 - bug fixes, themeroller changes
 // 3.4 => 2012-02-15 - bug fixes
 // Module software version information
-define('MODULE_REPORTICO_VERSION', '3.1');
+define('MODULE_REPORTICO_VERSION', '3.2');
 // Menu Sort Positions
 // Menu Security id's (refer to master doc to avoid security setting overlap)
 define('SECURITY_ID_REPORTICO', 3);
